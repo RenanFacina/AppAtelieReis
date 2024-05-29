@@ -1,19 +1,24 @@
+import "react-native-gesture-handler";
 import React from "react";
-import { StyleSheet, Text, View } from 'react-native';
-import TelaLogin from "./src/components/login/index";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { Routes } from "./src/routes";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <TelaLogin/>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e0e5e5',
-    paddingTop: 80,
+    backgroundColor: "#e0e5e5",
   },
 });
