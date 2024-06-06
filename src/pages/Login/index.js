@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { TextInput, Text, View, Pressable } from "react-native";
+import {
+  TextInput,
+  Text,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { auth } from "../../services/firebase.config";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Efetua login atraves da API
-import CadastroUser from "./cadastrouser";
 import styles from "./styles";
 
 import { useNavigation } from "@react-navigation/native";
 
-export function TelaLogin() {
+export function Login() {
   const navigation = useNavigation();
 
   const [userMail, setUserMail] = useState(""); //constantes para alocar email e senha
@@ -19,7 +24,7 @@ export function TelaLogin() {
         const user = userCredential.user; //captura os dados e armazena
         alert("Login realizado com sucesso!");
         //console.log(user);
-        navigation.navigate("HomeRoute");
+        navigation.replace("HomeRoute");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -47,18 +52,22 @@ export function TelaLogin() {
         value={userPass}
         onChangeText={setUserPass}
       />
-      <Pressable style={styles.botao} onPress={userLogin}>
+      <TouchableOpacity style={styles.botao} onPress={userLogin}>
         <Text style={styles.textoBotao}>Logar</Text>
-      </Pressable>
+      </TouchableOpacity>
       <View style={styles.subContainer}>
-        <Pressable style={styles.subBotao}>
+        <TouchableOpacity
+          style={styles.subBotao}
+          onPress={() => navigation.navigate("Esqueci a Senha")}
+        >
           <Text style={styles.subTextoBotao}>Esqueci a senha</Text>
-        </Pressable>
-        <Pressable style={styles.subBotao}>
-          <Text style={styles.subTextoBotao} onPress={CadastroUser}>
-            Novo usuário
-          </Text>
-        </Pressable>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.subBotao}
+          onPress={() => navigation.navigate("Cadastro")}
+        >
+          <Text style={styles.subTextoBotao}>Novo usuário</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

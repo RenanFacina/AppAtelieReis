@@ -6,7 +6,7 @@ export function IconButton({
   title,
   iconName,
   iconSize = 60,
-  iconColor = "#000",
+  iconColor = "#FFF",
   onPress,
   style,
 }) {
@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
     fontSize: 22,
+    fontWeight: 'bold'
   },
 });

@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { TelaLogin } from "../pages/Login";
+import { LoginRoute } from "./loginRoute";
 import { HomeRoute } from "./homeRoute";
 
 const Stack = createNativeStackNavigator();
@@ -10,8 +10,8 @@ export function Routes() {
   return (
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
-        name="Login"
-        component={TelaLogin}
+        name="LoginRoute"
+        component={LoginRoute}
         options={{
           headerShown: false,
         }}
