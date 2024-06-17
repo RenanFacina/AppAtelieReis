@@ -3,7 +3,6 @@ import {
   TextInput,
   Text,
   View,
-  Pressable,
   TouchableOpacity,
 } from "react-native";
 import { auth } from "../../services/firebase.config";
@@ -23,7 +22,6 @@ export function Login() {
       .then((userCredential) => {
         const user = userCredential.user; //captura os dados e armazena
         alert("Login realizado com sucesso!");
-        //console.log(user);
         navigation.replace("HomeRoute");
       })
       .catch((error) => {
