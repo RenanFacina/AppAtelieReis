@@ -29,6 +29,18 @@ export const globalStyles = StyleSheet.create({
     fontSize: 20,
   },
   pickerItem: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
+  submitButton: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: 'center',
+    backgroundColor: "#000",
+    height: 50,
+    borderRadius: 10,
+  },
+  submitButtonText: {
+    color: "#FFF",
+    fontSize: 20,
+  },
 });

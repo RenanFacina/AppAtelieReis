@@ -1,29 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
   TextInput,
   ScrollView,
   TouchableOpacity,
+  Button,
 } from "react-native";
 import { globalStyles } from "../../global/globalStyles";
 import { useForm, Controller } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { database } from "../../services/firebase.config";
 import { get, ref } from "firebase/database";
+import { AuthContext } from "../../context/AuthContext";
 
 export function NovoPedido() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ mode: "onSubmit" });
-
-  function handleCreateNewOrder(data) {
-    console.log(data);
-  }
-
   const [categorias, setCategorias] = useState([]);
+  const { user } = useContext(AuthContext);
 
   //TODO Usar .then e .catch na funcao get
   useEffect(() => {
@@ -47,8 +40,46 @@ export function NovoPedido() {
     getCategorias();
   }, []);
 
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onSubmit", defaultValues: { categoria: "" } });
+
+  function handleCreateNewOrder(data) {
+    const obj = {
+      user: user.uid,
+      orderDate: new Date(),
+      status: "pending",
+      categoria: data.categoria,
+      quantidade: data.quantidade,
+      descricao: data.teste,
+    };
+    console.log(obj);
+  }
+
+  const sections = [
+    {
+      title: "Section 1",
+      content: (
+        <View>
+          <Text>Teste</Text>
+        </View>
+      ),
+    },
+    {
+      title: "Section 2",
+      content: (
+        <View>
+          <Text>Teste</Text>
+        </View>
+      ),
+    },
+  ];
+
   return (
     <ScrollView style={globalStyles.container}>
+      {/*Picker*/}
       {errors.categoria && (
         <Text style={{ color: "#FF0000" }}>Campo obrigatório</Text>
       )}
@@ -65,23 +96,19 @@ export function NovoPedido() {
           control={control}
           name="categoria"
           rules={{ required: true }}
-          render={({ field: { onChange, value = 1 } }) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <Picker
               style={globalStyles.pickerInput}
               selectedValue={value}
               onValueChange={onChange}
+              onBlur={onBlur}
             >
-              <Picker.Item
-                key="1"
-                label="Escolha um"
-                value={1}
-                enabled={false}
-              />
+              <Picker.Item label="Escolha um..." value="" />
               {categorias.map((item) => (
                 <Picker.Item
                   style={globalStyles.pickerItem}
                   key={item.key}
-                  label={item.nome}
+                  label={item.nome.charAt(0).toUpperCase() + item.nome.slice(1)}
                   value={item.nome}
                 />
               ))}
@@ -90,6 +117,7 @@ export function NovoPedido() {
         />
       </View>
 
+      {/*Input Teste*/}
       {errors.teste && (
         <Text style={{ color: "#FF0000" }}>Campo obrigatório</Text>
       )}
@@ -97,7 +125,7 @@ export function NovoPedido() {
         control={control}
         name="teste"
         rules={{ required: true }}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={[
               globalStyles.input,
@@ -107,12 +135,14 @@ export function NovoPedido() {
               },
             ]}
             onChangeText={onChange}
+            onBlur={onBlur}
             value={value}
             placeholder="Digite teste"
           />
         )}
       />
 
+      {/*Quantidade*/}
       {errors.quantidade && (
         <Text style={{ color: "#FF0000" }}>Campo obrigatório</Text>
       )}
@@ -120,7 +150,7 @@ export function NovoPedido() {
         control={control}
         name="quantidade"
         rules={{ required: true }}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={[
               globalStyles.input,
@@ -130,6 +160,7 @@ export function NovoPedido() {
               },
             ]}
             onChangeText={onChange}
+            onBlur={onBlur}
             value={value}
             placeholder="Quantidade"
             keyboardType="numeric"
@@ -137,23 +168,12 @@ export function NovoPedido() {
         )}
       />
 
-      <TouchableOpacity onPress={handleSubmit(handleCreateNewOrder)}>
-        <Text>Clique para enviar</Text>
+      <TouchableOpacity
+        style={globalStyles.submitButton}
+        onPress={handleSubmit(handleCreateNewOrder)}
+      >
+        <Text style={globalStyles.submitButtonText}>Enviar</Text>
       </TouchableOpacity>
     </ScrollView>
   );
-}
-
-{
-  /* <Picker
-          style={globalStyles.pickerInput}
-          selectedValue={selectedLanguage}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedLanguage(itemValue)
-          }
-        >
-          {categorias.map((item) => (
-            <Picker.Item key={item.key} label={item.nome} value={item.nome} />
-          ))}
-        </Picker> */
 }

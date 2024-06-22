@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { IconButton } from "../../components/IconButton";
 import { globalStyles } from "../../global/globalStyles";
+import { AuthContext } from '../../context/AuthContext'
 
 export function Home({ navigation }) {
+  const { user } = useContext(AuthContext)
+
   return (
     <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Bem Vindo!</Text>
+      <Text style={globalStyles.title}>Olá, {user.nome}! </Text>
       <View style={styles.buttonContainer}>
         <IconButton
           iconName="Plus"

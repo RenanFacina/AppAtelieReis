@@ -1,27 +1,41 @@
-import React, { useState } from "react";
-import {
-  TextInput,
-  Text,
-  View,
-  TouchableOpacity,
-} from "react-native";
-import { auth } from "../../services/firebase.config";
+import React, { useContext, useState } from "react";
+import { TextInput, Text, View, TouchableOpacity } from "react-native";
+import { auth, database } from "../../services/firebase.config";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Efetua login atraves da API
 import styles from "./styles";
 
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
+import { get, ref } from "firebase/database";
 
 export function Login() {
-  const navigation = useNavigation();
-
   const [userMail, setUserMail] = useState(""); //constantes para alocar email e senha
   const [userPass, setUserPass] = useState("");
+
+  const navigation = useNavigation();
+
+  const { setUser } = useContext(AuthContext);
 
   function userLogin() {
     signInWithEmailAndPassword(auth, userMail, userPass)
       .then((userCredential) => {
-        const user = userCredential.user; //captura os dados e armazena
-        alert("Login realizado com sucesso!");
+        let uid = userCredential.user.uid;
+
+        get(ref(database, `usuarios/${uid}`))
+          .then((snapshot) => {
+            let newUser = {
+              uid: snapshot.key,
+              admin: snapshot.val().admin,
+              email: snapshot.val().email,
+              nome: snapshot.val().nome,
+            };
+
+            setUser(newUser);
+          })
+          .catch((error) => {
+            alert(`Ocorreu um erro:\n${error}`);
+          });
+
         navigation.replace("HomeRoute");
       })
       .catch((error) => {
