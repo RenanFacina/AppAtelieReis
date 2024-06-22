@@ -31,17 +31,14 @@ export function Login() {
             };
 
             setUser(newUser);
+            navigation.replace("HomeRoute");
           })
           .catch((error) => {
-            alert(`Ocorreu um erro:\n${error}`);
+            alert(`Ocorreu um erro ao buscar dados do usuário:\n${error}`);
           });
-
-        navigation.replace("HomeRoute");
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorMessage);
+        alert(`Ocorreu um erro, verifique usuário e senha:\n${error}`);
       });
   }
   return (

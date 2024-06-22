@@ -5,14 +5,14 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import { globalStyles } from "../../global/globalStyles";
 import { useForm, Controller } from "react-hook-form";
 import { Picker } from "@react-native-picker/picker";
 import { database } from "../../services/firebase.config";
-import { get, ref } from "firebase/database";
+import { get, push, ref, set } from "firebase/database";
 import { AuthContext } from "../../context/AuthContext";
+import { format } from "date-fns";
 
 export function NovoPedido() {
   const [categorias, setCategorias] = useState([]);
@@ -47,35 +47,28 @@ export function NovoPedido() {
   } = useForm({ mode: "onSubmit", defaultValues: { categoria: "" } });
 
   function handleCreateNewOrder(data) {
-    const obj = {
-      user: user.uid,
-      orderDate: new Date(),
-      status: "pending",
+    const novoPedido = {
+      usuario: user.uid,
+      dataPedido: format(new Date(), "dd/MM/yyyy HH:mm"),
+      status: "pendente",
       categoria: data.categoria,
       quantidade: data.quantidade,
       descricao: data.teste,
+      enderecoEntrega: data.teste,
+      telefoneContato: data.teste,
     };
-    console.log(obj);
-  }
 
-  const sections = [
-    {
-      title: "Section 1",
-      content: (
-        <View>
-          <Text>Teste</Text>
-        </View>
-      ),
-    },
-    {
-      title: "Section 2",
-      content: (
-        <View>
-          <Text>Teste</Text>
-        </View>
-      ),
-    },
-  ];
+    const pedidosRef = ref(database, "pedidos/");
+    const novoPedidoRef = push(pedidosRef);
+
+    set(novoPedidoRef, novoPedido)
+      .then(() => {
+        alert("Pedido adicionado com sucesso!");
+      })
+      .catch((error) =>
+        alert(`Ocorreu um erro ao adicionar um novo pedido\n ${error}`)
+      );
+  }
 
   return (
     <ScrollView style={globalStyles.container}>
