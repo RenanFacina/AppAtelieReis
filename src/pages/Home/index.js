@@ -5,7 +5,7 @@ import { globalStyles } from "../../global/globalStyles";
 import { AuthContext } from '../../context/AuthContext'
 
 export function Home({ navigation }) {
-  const { user } = useContext(AuthContext)
+  const { user, setUser } = useContext(AuthContext)
 
   return (
     <View style={globalStyles.container}>
@@ -29,7 +29,7 @@ export function Home({ navigation }) {
         <IconButton
           iconName="SignOut"
           title="Sair"
-          // onPress={() => navigation.navigate("Sobre")}
+          onPress={() => setUser(null)}
         />
       </View>
     </View>
