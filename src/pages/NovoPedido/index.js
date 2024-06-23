@@ -18,11 +18,27 @@ export function NovoPedido() {
   const [categorias, setCategorias] = useState([]);
   const { user } = useContext(AuthContext);
 
-  //TODO Usar .then e .catch na funcao get
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    defaultValues: {
+      categoria: "",
+      tamanho: "",
+      descricao: "",
+      quantidade: "",
+      telefoneContato: "",
+      enderecoEntrega: "",
+    },
+  });
+
   useEffect(() => {
-    async function getCategorias() {
-      const snapshot = await get(ref(database, "categorias"));
-      if (snapshot.exists()) {
+    get(ref(database, "categorias"))
+      .then((snapshot) => {
         setCategorias([]);
 
         snapshot.forEach((item) => {
@@ -32,19 +48,11 @@ export function NovoPedido() {
           };
           setCategorias((oldArray) => [...oldArray, data]);
         });
-      } else {
-        console.log("No data available");
-      }
-    }
-
-    getCategorias();
+      })
+      .catch((error) => {
+        alert(`Ocorreu um erro ao buscar as categorias:\n${error}`);
+      });
   }, []);
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ mode: "onSubmit", defaultValues: { categoria: "" } });
 
   function handleCreateNewOrder(data) {
     const novoPedido = {
@@ -52,10 +60,11 @@ export function NovoPedido() {
       dataPedido: format(new Date(), "dd/MM/yyyy HH:mm"),
       status: "pendente",
       categoria: data.categoria,
+      tamanho: data.tamanho,
+      descricao: data.descricao,
       quantidade: data.quantidade,
-      descricao: data.teste,
-      enderecoEntrega: data.teste,
-      telefoneContato: data.teste,
+      telefoneContato: data.telefoneContato,
+      enderecoEntrega: data.enderecoEntrega,
     };
 
     const pedidosRef = ref(database, "pedidos/");
@@ -63,6 +72,7 @@ export function NovoPedido() {
 
     set(novoPedidoRef, novoPedido)
       .then(() => {
+        reset();
         alert("Pedido adicionado com sucesso!");
       })
       .catch((error) =>
@@ -72,10 +82,7 @@ export function NovoPedido() {
 
   return (
     <ScrollView style={globalStyles.container}>
-      {/*Picker*/}
-      {errors.categoria && (
-        <Text style={{ color: "#FF0000" }}>Campo obrigatório</Text>
-      )}
+      {/*Categoria*/}
       <View
         style={[
           globalStyles.pickerView,
@@ -96,7 +103,7 @@ export function NovoPedido() {
               onValueChange={onChange}
               onBlur={onBlur}
             >
-              <Picker.Item label="Escolha um..." value="" />
+              <Picker.Item style={globalStyles.pickerItem} label="Escolha uma Categoria..." value="" />
               {categorias.map((item) => (
                 <Picker.Item
                   style={globalStyles.pickerItem}
@@ -110,39 +117,64 @@ export function NovoPedido() {
         />
       </View>
 
-      {/*Input Teste*/}
-      {errors.teste && (
-        <Text style={{ color: "#FF0000" }}>Campo obrigatório</Text>
-      )}
+      {/*Tamanho*/}
+      <View
+        style={[
+          globalStyles.pickerView,
+          {
+            borderWidth: errors.tamanho && 2,
+            borderColor: errors.tamanho && "#FF0000",
+          },
+        ]}
+      >
+        <Controller
+          control={control}
+          name="tamanho"
+          rules={{ required: true }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Picker
+              style={globalStyles.pickerInput}
+              selectedValue={value}
+              onValueChange={onChange}
+              onBlur={onBlur}
+            >
+              <Picker.Item style={globalStyles.pickerItem} label="Escolha um Tamanho..." value="" />
+              <Picker.Item style={globalStyles.pickerItem} label="P" value="P" />
+              <Picker.Item style={globalStyles.pickerItem} label="M" value="M" />
+              <Picker.Item style={globalStyles.pickerItem} label="G" value="G" />
+              <Picker.Item style={globalStyles.pickerItem} label="GG" value="GG" />
+            </Picker>
+          )}
+        />
+      </View>
+
+      {/*Descrição*/}
       <Controller
         control={control}
-        name="teste"
-        rules={{ required: true }}
+        name="descricao"
+        rules={{ required: true, maxLength: 50 }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={[
               globalStyles.input,
               {
-                borderWidth: errors.teste && 2,
-                borderColor: errors.teste && "#FF0000",
+                borderWidth: errors.descricao && 2,
+                borderColor: errors.descricao && "#FF0000",
               },
             ]}
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}
-            placeholder="Digite teste"
+            placeholder="Descrição"
           />
         )}
       />
 
       {/*Quantidade*/}
-      {errors.quantidade && (
-        <Text style={{ color: "#FF0000" }}>Campo obrigatório</Text>
-      )}
       <Controller
         control={control}
         name="quantidade"
-        rules={{ required: true }}
+        rules={{ required: true, max: 100 }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
             style={[
@@ -157,6 +189,51 @@ export function NovoPedido() {
             value={value}
             placeholder="Quantidade"
             keyboardType="numeric"
+          />
+        )}
+      />
+
+      {/*Telefone para contato*/}
+      <Controller
+        control={control}
+        name="telefoneContato"
+        rules={{ required: true, maxLength: 11 }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={[
+              globalStyles.input,
+              {
+                borderWidth: errors.telefoneContato && 2,
+                borderColor: errors.telefoneContato && "#FF0000",
+              },
+            ]}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            value={value}
+            placeholder="Telefone para contato"
+            keyboardType="phone-pad"
+          />
+        )}
+      />
+
+      {/*Endereço para entrega*/}
+      <Controller
+        control={control}
+        name="enderecoEntrega"
+        rules={{ required: true }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={[
+              globalStyles.input,
+              {
+                borderWidth: errors.enderecoEntrega && 2,
+                borderColor: errors.enderecoEntrega && "#FF0000",
+              },
+            ]}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            value={value}
+            placeholder="Endereço para entrega"
           />
         )}
       />
