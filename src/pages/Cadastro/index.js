@@ -5,6 +5,8 @@ import { auth, database } from "../../services/firebase.config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { push, ref, set } from "firebase/database";
 
+import * as Animatable from 'react-native-animatable';
+
 export function Cadastro({ navigation }) {
   const [username, setUsername] = useState("");
   const [userMail, setUserMail] = useState("");
@@ -114,9 +116,13 @@ export function Cadastro({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Novo Usuário</Text>
-
+      <Animatable.View animation="fadeInLeft" style={styles.cabecalho}>
+          <Text style={styles.titulo}>Novo Usuário</Text>
+      </Animatable.View>
+    
+      <Animatable.View animation="fadeInUp" style={styles.form}>
       {/*Nome*/}
+      <Text style={styles.subtitulo}>Nome</Text>
       <TextInput
         style={styles.input}
         placeholder="Nome do usuário"
@@ -127,6 +133,7 @@ export function Cadastro({ navigation }) {
       />
 
       {/*Email*/}
+      <Text style={styles.subtitulo}>Email</Text>
       <TextInput
         style={styles.input}
         placeholder="E-mail de usuário"
@@ -138,6 +145,7 @@ export function Cadastro({ navigation }) {
       />
 
       {/*Senha*/}
+      <Text style={styles.subtitulo}>Senha</Text>
       <TextInput
         style={styles.input}
         placeholder="Senha de usuário"
@@ -149,6 +157,7 @@ export function Cadastro({ navigation }) {
       <Text style={styles.forcaSenha}>{forcaSenha}</Text>
 
       {/*Confirma Senha*/}
+      <Text style={styles.subtitulo}>Confirme a Senha</Text>
       <TextInput
         style={styles.input}
         placeholder="Confirme a senha"
@@ -160,6 +169,7 @@ export function Cadastro({ navigation }) {
       <Pressable style={styles.botao} onPress={newUser}>
         <Text style={styles.textoBotao}>Cadastrar</Text>
       </Pressable>
+      </Animatable.View>
     </View>
   );
 }

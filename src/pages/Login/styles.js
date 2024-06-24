@@ -3,48 +3,60 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#B49CA4",
   },
-
+  cabecalho:{
+    marginTop:'14%',
+    marginBottom:'8%',
+    paddingStart:'5%',
+  },
   titulo: {
-    fontSize: 36,
+    fontSize: 28,
     fontWeight: "bold",
-    color: "blue",
-    margin: 10,
+    color: "#FFF",
+  },
+  subTitulo:{
+    fontSize:20,
+    marginTop:28,
+  },
+  form:{
+    backgroundColor:'#FFF',
+    flex:1,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingStart:'5%',
+    paddingEnd:'5%'
   },
   input: {
-    borderColor: "blueviolet",
-    borderWidth: 1,
-    borderRadius: 10,
-    fontSize: 22,
-    width: "80%",
-    padding: 10,
-    margin: 10,
+    borderBottomWidth:1,
+    height:40,
+    marginBottom:12,
+    fontSize:16,
   },
   botao: {
-    backgroundColor: "blueviolet",
-    borderRadius: 10,
-    width: "80%",
-    padding: 10,
-    margin: 10,
-    alignItems: "center",
+    backgroundColor: "#B49CA4",
+    width:'100%',
+    borderRadius:4,
+    paddingVertical:8,
+    marginTop:14,
+    justifyContent:'center',
+    alignItems:'center'
   },
   textoBotao: {
-    color: "white",
-    fontSize: 20,
+    color: "#FFF",
+    fontSize: 18,
     fontWeight: "bold",
   },
   subContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "80%",
-  },
-  subBotao: {
-    padding: 10,
+    width: "100%",
   },
   subTextoBotao: {
-    color: "blueviolet",
+    color: "#a1a1a1",
+    marginTop:14,
+    padding:10,
   },
 });
+
+export default styles;

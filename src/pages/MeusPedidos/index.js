@@ -1,13 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, StyleSheet } from "react-native";
+import { IconButton } from "../../components/IconButton";
 import { globalStyles } from "../../global/globalStyles";
 import { OrderCard } from "../../components/OrderCard";
 import { ref, get, off, onValue } from "firebase/database";
 import { database } from "../../services/firebase.config";
 import { AuthContext } from "../../context/AuthContext";
 import { compareDesc, format, parse } from "date-fns";
+import * as Animatable from "react-native-animatable";
+import { useNavigation } from "@react-navigation/native";
+import Home from "../Home";
 
 export function MeusPedidos() {
+  const navigation = useNavigation();
+
   const [pedidos, setPedidos] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -79,10 +85,29 @@ export function MeusPedidos() {
   }, []);
 
   return (
-    <ScrollView style={globalStyles.container}>
-      {pedidos.map((pedido) => (
-        <OrderCard key={pedido.key} order={pedido} />
-      ))}
-    </ScrollView>
+    <Animatable.View style={{ width:'100%', height:'100%'}}
+    delay = {600}
+    animation = {'fadeInUp'}>
+      <ScrollView style={globalStyles.container}>
+        {pedidos.map((pedido) => (
+          <OrderCard key={pedido.key} order={pedido} />
+        ))}
+      </ScrollView>
+      <IconButton style={styles.addButton}
+        iconName="Plus"
+        onPress={() => navigation.navigate("Novo Pedido")}
+      />
+    </Animatable.View>
   );
 }
+
+const styles = StyleSheet.create({
+  addButton: {
+    height: 65,
+    width: 65,
+    backgroundColor: '#B49CA4',
+    borderRadius: 15,
+    left: '70%',
+    bottom: '5%',
+  },
+})

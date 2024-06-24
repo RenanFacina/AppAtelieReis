@@ -4,35 +4,35 @@ import { IconButton } from "../../components/IconButton";
 import { globalStyles } from "../../global/globalStyles";
 import { AuthContext } from '../../context/AuthContext'
 
+import * as Animatable from "react-native-animatable";
+
 export function Home({ navigation }) {
   const { user, setUser } = useContext(AuthContext)
 
   return (
-    <View style={globalStyles.container}>
+    <Animatable.View style={globalStyles.container}
+    delay = {600}
+    animation = {'fadeInUp'}>
       <Text style={globalStyles.title}>Olá, {user.nome}! </Text>
       <View style={styles.buttonContainer}>
-        <IconButton
+      <IconButton style={globalStyles.wideButton}
           iconName="Plus"
           title="Novo Pedido"
           onPress={() => navigation.navigate("Novo Pedido")}
         />
-        <IconButton
+        <IconButton style={globalStyles.wideButton}
           iconName="Scroll"
           title="Meus Pedidos"
           onPress={() => navigation.navigate("Meus Pedidos")}
         />
-        <IconButton
-          iconName="Info"
-          title="Sobre"
-          onPress={() => navigation.navigate("Sobre")}
-        />
-        <IconButton
+        <IconButton style={globalStyles.wideButton}
           iconName="SignOut"
           title="Sair"
           onPress={() => setUser(null)}
+          // onPress={() => navigation.navigate("Sobre")}
         />
       </View>
-    </View>
+    </Animatable.View>
   );
 }
 

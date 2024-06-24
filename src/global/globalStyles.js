@@ -31,6 +31,11 @@ export const globalStyles = StyleSheet.create({
   pickerItem: {
     fontSize: 20,
   },
+  wideButton: {
+    backgroundColor: '#8d6889',
+    height: 120,
+    width: 250,
+  },
   submitButton: {
     flex: 1,
     alignItems: "center",
