@@ -122,7 +122,7 @@ export function Cadastro({ navigation }) {
     
       <Animatable.View animation="fadeInUp" style={styles.form}>
       {/*Nome*/}
-      <Text style={styles.subtitulo}>Nome</Text>
+      <Text style={styles.subtitulo}>{"\n"}Nome</Text>
       <TextInput
         style={styles.input}
         placeholder="Nome do usuário"
