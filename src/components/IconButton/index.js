@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10
   },
-  icon: {marginBottom: 30},
   buttonText: {
     textAlign: "center",
     color: "#fff",
