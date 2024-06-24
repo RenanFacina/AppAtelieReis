@@ -22,13 +22,13 @@ export function OrderCard({ order }) {
 
 const styles = StyleSheet.create({
   orderCard: {
-    borderRadius: 5,
+    borderRadius: 15,
     backgroundColor: "#FFF",
     marginBottom: 25
   },
   cardHeader: {
     borderRadius: 5,
-    backgroundColor: "#ff0",
+    backgroundColor: "#B49CA4",
     padding: 10,
   },
   cardHeaderDate: {

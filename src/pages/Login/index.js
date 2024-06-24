@@ -4,6 +4,7 @@ import { auth, database } from "../../services/firebase.config";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Efetua login atraves da API
 import { styles } from "./styles";
 
+import * as Animatable from 'react-native-animatable';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import { get, ref } from "firebase/database";
@@ -43,7 +44,12 @@ export function Login() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Login Ateliê Reis</Text>
+      <Animatable.View animation='fadeInLeft' delay={500} style={styles.cabecalho}>
+      <Text style={styles.titulo}>Bem-vindo(a)</Text>
+      </Animatable.View>
+
+      <Animatable.View animation='fadeInUp' style={styles.form}>
+        <Text style={styles.subTitulo}>Email</Text>
       <TextInput
         style={styles.input}
         placeholder="Informe o E-mail"
@@ -53,6 +59,7 @@ export function Login() {
         value={userMail}
         onChangeText={setUserMail}
       />
+      <Text style={styles.subTitulo}>Senha</Text>
       <TextInput
         style={styles.input}
         placeholder="Informe a senha"
@@ -62,10 +69,10 @@ export function Login() {
         onChangeText={setUserPass}
       />
       <TouchableOpacity style={styles.botao} onPress={userLogin}>
-        <Text style={styles.textoBotao}>Logar</Text>
+        <Text style={styles.textoBotao}>Acessar</Text>
       </TouchableOpacity>
       <View style={styles.subContainer}>
-        <TouchableOpacity
+      <TouchableOpacity
           style={styles.subBotao}
           onPress={() => navigation.navigate("Esqueci a Senha")}
         >
@@ -78,6 +85,7 @@ export function Login() {
           <Text style={styles.subTextoBotao}>Novo usuário</Text>
         </TouchableOpacity>
       </View>
+      </Animatable.View>
     </View>
   );
 }
