@@ -40,7 +40,7 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: 'center',
-    backgroundColor: "#000",
+    backgroundColor: "#B49CA4",
     height: 50,
     borderRadius: 10,
   },
