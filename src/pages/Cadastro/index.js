@@ -1,17 +1,24 @@
 import { Pressable, Text, TextInput, View } from "react-native";
 import { styles } from "../Login/styles";
 import { useState } from "react";
-import { auth } from "../../services/firebase.config";
+import { auth, database } from "../../services/firebase.config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { push, ref, set } from "firebase/database";
 
 export function Cadastro({ navigation }) {
+  const [username, setUsername] = useState("");
   const [userMail, setUserMail] = useState("");
   const [userPass, setUserPass] = useState("");
   const [userRePass, setUserRePass] = useState("");
   const [forcaSenha, setforcaSenha] = useState("");
 
   function newUser() {
-    if (userMail === "" || userPass === "" || userRePass === "") {
+    if (
+      username === "" ||
+      userMail === "" ||
+      userPass === "" ||
+      userRePass === ""
+    ) {
       alert("Todos os campos devem ser preenchidos!");
       return; //Verifica se há algum campo vazio
     }
@@ -30,14 +37,24 @@ export function Cadastro({ navigation }) {
 
     createUserWithEmailAndPassword(auth, userMail, userPass)
       .then((UserCredencial) => {
-        const user = UserCredencial.user; //Captura as informações do novo usuario
-        alert("O usuário " + userMail + " foi criado. Faça o login");
-        navigation.navigate("Login");
+
+        //Salva as informações do usuário no Realtime Database
+        const novoUsuarioRef = ref(database, `usuarios/${UserCredencial.user.uid}`);
+        set(novoUsuarioRef, {
+          admin: false,
+          email: UserCredencial.user.email,
+          nome: username,
+        })
+          .then(() => {
+            alert("O usuário " + userMail + " foi criado. Faça o login");
+            navigation.navigate("Login");
+          })
+          .catch((error) => {
+            alert(`Ocorreu um erro ao criar o usuário:\n${error}`);
+          });
       })
       .catch((error) => {
-        const errorMessage = error.message;
-        alert(errorMessage);
-        navigation.navigate("Login");
+        alert(`Ocorreu um erro ao criar o usuário:\n${error}`);
       });
   }
 
@@ -98,6 +115,18 @@ export function Cadastro({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Novo Usuário</Text>
+
+      {/*Nome*/}
+      <TextInput
+        style={styles.input}
+        placeholder="Nome do usuário"
+        autoCapitalize="none"
+        autoComplete="name"
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      {/*Email*/}
       <TextInput
         style={styles.input}
         placeholder="E-mail de usuário"
@@ -107,6 +136,8 @@ export function Cadastro({ navigation }) {
         value={userMail}
         onChangeText={setUserMail}
       />
+
+      {/*Senha*/}
       <TextInput
         style={styles.input}
         placeholder="Senha de usuário"
@@ -117,6 +148,7 @@ export function Cadastro({ navigation }) {
       />
       <Text style={styles.forcaSenha}>{forcaSenha}</Text>
 
+      {/*Confirma Senha*/}
       <TextInput
         style={styles.input}
         placeholder="Confirme a senha"

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { TextInput, Text, View, TouchableOpacity } from "react-native";
 import { auth, database } from "../../services/firebase.config";
 import { signInWithEmailAndPassword } from "firebase/auth"; // Efetua login atraves da API
-import styles from "./styles";
+import { styles } from "./styles";
 
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
@@ -21,9 +21,10 @@ export function Login() {
       .then((userCredential) => {
         let uid = userCredential.user.uid;
 
+        //Capturar informações do usuário e armazenar no contexto
         get(ref(database, `usuarios/${uid}`))
           .then((snapshot) => {
-            let newUser = {
+            const newUser = {
               uid: snapshot.key,
               admin: snapshot.val().admin,
               email: snapshot.val().email,
@@ -31,7 +32,6 @@ export function Login() {
             };
 
             setUser(newUser);
-            navigation.replace("HomeRoute");
           })
           .catch((error) => {
             alert(`Ocorreu um erro ao buscar dados do usuário:\n${error}`);

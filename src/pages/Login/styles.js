@@ -48,5 +48,3 @@ export const styles = StyleSheet.create({
     color: "blueviolet",
   },
 });
-
-export default styles;
