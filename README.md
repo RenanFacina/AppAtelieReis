@@ -1,4 +1,4 @@
-# 🎨 App Ateliê Reis
+# 👚 App Ateliê Reis
 
 Aplicativo desenvolvido com Expo para facilitar o agendamento de serviços personalizados de ateliê.
 
